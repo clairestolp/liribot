@@ -1,6 +1,6 @@
 # Liri Bot
 
-###Description
+### Description
 
 ### Technology
 
@@ -22,9 +22,6 @@
 
    * [DotEnv](https://www.npmjs.com/package/dotenv)
 
-### Submission on BCS
-
-* Please submit the link to the Github Repository!
 
 ### Instructions
 
