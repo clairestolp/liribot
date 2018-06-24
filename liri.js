@@ -1,11 +1,13 @@
 const dotenv = require('dotenv').config();
+const keys = require('./keys.js');
 const Twitter = require('twitter');
 const Spotify = require('node-spotify-api');
 const request = require('request');
 const inquirer = require('inquirer');
 
-//const spotify = new Spotify(keys.spotify);
-//const client = new Twitter(keys.twitter);
+
+const spotify = new Spotify(keys.spotify);
+const client = new Twitter(keys.twitter);
 
 inquirer.prompt([
     {
@@ -36,8 +38,8 @@ function executeCommand(response) {
     switch (response) {
         case 'View my tweets':
             console.log('\nHere are your tweets\n');
+            getTweets();
             console.log('\n----------------------\n');
-            askLiri();
             break;
         case 'Spotify a song':
             console.log('\nWhat song should I look for?\n');
@@ -55,4 +57,15 @@ function executeCommand(response) {
             console.log('\nI\'m sorry, I didn\'t get that.\n');
             break;
     };
+}
+
+function getTweets () {
+    client.get('statuses/home_timeline.json?screen_name=block_comment&count=2', function(err, tweets, response) {
+        if(!err && response.statusCode === 200) {
+            console.log(tweets);
+        }else{
+            console.log('Staus', response.statusCode);
+            console.log(err);
+        }
+    });
 }
