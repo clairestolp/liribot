@@ -1,11 +1,15 @@
 const dotenv = require('dotenv').config();
+const keys = require('./keys.js');
 const Twitter = require('twitter');
 const Spotify = require('node-spotify-api');
 const request = require('request');
 const inquirer = require('inquirer');
+const chalk = require('chalk');
+const wrapAnsi = require('wrap-ansi');
 
-//const spotify = new Spotify(keys.spotify);
-//const client = new Twitter(keys.twitter);
+
+const spotify = new Spotify(keys.spotify);
+const client = new Twitter(keys.twitter);
 
 inquirer.prompt([
     {
@@ -35,12 +39,12 @@ function askLiri() {
 function executeCommand(response) {
     switch (response) {
         case 'View my tweets':
-            console.log('\nHere are your tweets\n');
-            console.log('\n----------------------\n');
-            askLiri();
+            console.log(chalk.cyan('\nHere are your tweets\n'));
+            getTweets();
             break;
         case 'Spotify a song':
             console.log('\nWhat song should I look for?\n');
+            console.log('this is a string')
             console.log('\n----------------------\n');
             break;
         case 'Movie this':
@@ -55,4 +59,38 @@ function executeCommand(response) {
             console.log('\nI\'m sorry, I didn\'t get that.\n');
             break;
     };
+}
+
+function getTweets () {
+    client.get('statuses/home_timeline.json?screen_name=block_comment&count=20', function(err, tweets, response) {
+        if(!err && response.statusCode === 200) {
+            tweets.forEach(function(tweet) {
+                console.log(`\n* ${chalk.magenta(tweet.created_at)}:`);
+                console.log(`\n${wrapAnsi(tweet.text, 80)}`);
+            });
+            console.log('\n----------------------\n');
+            askLiri();
+        }else{
+            console.log('Status', response.statusCode);
+            console.log(err);
+        }
+    });
+}
+
+function spotifySong () {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What song should I look for?',
+            name: 'song'
+        }
+    ]).then(function (response) {
+        spotify.search({type: 'track', query: response.song}, function (err, data) {
+            if(!err){
+                console.log(data);
+            }else{
+                console.log(err);
+            }
+        });
+    });
 }
