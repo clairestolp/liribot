@@ -105,7 +105,7 @@ function movieThis(response) {
             name: 'movie'
         }
     ]).then(function (response) {
-        getOmdb(response.movie);
+        getImdb(response.movie);
     });
 }
 
@@ -141,7 +141,7 @@ function getSpotify(query) {
     });
 }
 
-function getOmdb(query) {
+function getImdb(query) {
     let movie = query.replace(' ', '+');
         let url = `http://www.omdbapi.com/?t=${movie}&apikey=a9119e4b`;
         //console.log(url);
