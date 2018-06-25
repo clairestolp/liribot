@@ -2,6 +2,7 @@ const dotenv = require('dotenv').config();
 const keys = require('./keys.js');
 const Twitter = require('twitter');
 const Spotify = require('node-spotify-api');
+const fs = require('fs');
 const request = require('request');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
@@ -47,10 +48,19 @@ function executeCommand(response) {
             break;
         case 'Movie this':
             movieThis();
-            console.log('\n----------------------\n');
             break;
         case 'Do what it says':
             console.log('\nOkay, I will\n');
+            fs.readFile('./random.txt', 'utf8', function (err, data) {
+                if(!err) {
+                    let commands = data.split(',');
+                    let rng = Math.floor(Math.random()*commands.length);
+                    console.log(commands[rng]);
+                    //command(commands[rng]);
+                }else{
+                    console.log(err);
+                }
+            })
             console.log('\n----------------------\n');
             break;
         default:
@@ -83,24 +93,7 @@ function spotifySong () {
             name: 'song'
         }
     ]).then(function (response) {
-        spotify.search({type: 'track', query: response.song, limit: 1}, function (err, data) {
-            if(!err){
-                let song = data.tracks.items[0];
-                console.log(chalk.green('\nHere is what I found\n'));
-                console.log(chalk.green('Artist: '), song.album.artists[0].name, '\n');
-                console.log(chalk.green('Song: '), song.name, '\n');
-                console.log(chalk.green('Preview: '), song.preview_url, '\n');
-                console.log('\n----------------------\n');
-            }else{
-                if(!song) {
-                    console.log('I\'m sorry, I didn\'t get that. Could you say it again?');
-                    spotifySong();
-                }else{
-                    console.log(err);
-                }
-            }
-            askLiri();
-        });
+        getSpotify(response.song);
     });
 }
 
@@ -112,15 +105,64 @@ function movieThis(response) {
             name: 'movie'
         }
     ]).then(function (response) {
-        let movie = response.movie.replace(' ', '+');
-        console.log(movie);
-        let url = `http://www.omdbapi.com/?t=${movie}&apikey=a9119e4b`;
-        request(url, function(err, response, body) {
-            if(!err && response.statusCode === 200){
-                console.log(JSON.stringify(response));
+        getImdb(response.movie);
+    });
+}
+
+function command (order) {
+    let arr = order.split(':');
+    switch (arr[0]) {
+        case 'spotify':
+            console.log(chalk.bold.green(`Searching spotify for ${arr[1]}`));
+            getSpotify(arr[1]);
+            break;
+    }
+}
+
+
+function getSpotify(query) {
+    spotify.search({type: 'track', query: query, limit: 1}, function (err, data) {
+        if(!err){
+            let song = data.tracks.items[0];
+            console.log(chalk.green('\nHere is what I found\n'));
+            console.log(chalk.green('Artist: '), song.album.artists[0].name, '\n');
+            console.log(chalk.green('Song: '), song.name, '\n');
+            console.log(chalk.green('Preview: '), song.preview_url, '\n');
+            console.log('\n----------------------\n');
+        }else{
+            if(!song) {
+                console.log('I\'m sorry, I didn\'t get that. Could you say it again?');
+                spotifySong();
             }else{
                 console.log(err);
             }
-        });
+        }
+        askLiri();
     });
+}
+
+function getImdb(query) {
+    let movie = query.replace(' ', '+');
+        let url = `http://www.omdbapi.com/?t=${movie}&apikey=a9119e4b`;
+        //console.log(url);
+        request(url, function(err, response, body) {
+            if(!err && response.statusCode === 200){
+                let data = JSON.parse(body);
+                console.log(chalk.red('\nThis is what I found...\n'));
+                
+                console.log(chalk.red('Title: '), data.Title, '\n');
+                console.log(chalk.red('Released: '), data.Year, '\n');
+                console.log(chalk.red('IMDB gave it: '), data.imdbRating, '\n');
+                console.log(chalk.red('Rotton Tomatoes gave it: '), data.Ratings[1].Value, '\n');
+                console.log(chalk.red('Created in: '), data.Country, '\n');
+                console.log(chalk.red('Plot: '), wrapAnsi(data.Plot, 80), '\n');
+                console.log(chalk.red('Actors: '), wrapAnsi(data.Actors, 80), '\n');
+
+                console.log('\n----------------------\n');
+                askLiri();
+            }else{
+                console.log('-------ERROR--------');
+                console.log(err);
+            }
+        });
 }
