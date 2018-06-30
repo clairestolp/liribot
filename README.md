@@ -1,29 +1,30 @@
 # Liri Bot
 
 ### Description
+Liri is a CLI program that fetches information for you. Liri has four different commands she can perform: get your 20 most recent tweets, spotify a song, get the imdb information about a movie, and do something randomly.
 
 ### Technology
 
-### Assignment
+* JavaScript
+* NodeJS
+* Modules used: 
+    * envdot
+    * twitter
+    * node-spotify-api
+    * fs
+    * request
+    * inquirer
+    * chalk
+    * wrap-ansi
 
-1. LIRI will display your latest tweets. As we do not want to display your personal account, or its keys, please make an alias account and add a few tweets to it!
+### Approach
+Iquirer is used to prompt the user to choose between the four commands the user can execute. The user's selection is passed through the `executeCommand()` function which executes the appropriate for each command. Chalk and wrap-Ansi is used to format each output by the program.
 
-2. Make a new GitHub repository called liri-node-app and clone it to your computer.
+`getTweets()` fetches the twitter data for the user keys stored in the .env files and prints the date and the contents of the tweet to the console
 
-3. To retrieve the data that will power this app, you'll need to send requests to the Twitter, Spotify and OMDB APIs. You'll find these Node packages crucial for your assignment.
+`spotifyThis()` uses inquirer to prompt the user to enter a song and runs `getSpotify()` on success. 
 
-   * [Twitter](https://www.npmjs.com/package/twitter)
-   
-   * [Node-Spotify-API](https://www.npmjs.com/package/node-spotify-api)
-   
-   * [Request](https://www.npmjs.com/package/request)
-
-     * You'll use Request to grab data from the [OMDB API](http://www.omdbapi.com).
-
-   * [DotEnv](https://www.npmjs.com/package/dotenv)
-
-
-### Instructions
+### Assignment Instructions
 
 1. Navigate to the root of your project and run `npm init -y` &mdash; this will initialize a `package.json` file for your project. The `package.json` file is required for installing third party npm packages and saving their version numbers. If you fail to initialize a `package.json` file, it will be troublesome, and at times almost impossible for anyone else to run your code after cloning your project.
 
