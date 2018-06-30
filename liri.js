@@ -62,7 +62,7 @@ function executeCommand(response) {
 }
 
 function getTweets () {
-    client.get('statuses/home_timeline.json?screen_name=block_comment&count=20', function(err, tweets, response) {
+    client.get('statuses/user_timeline.json?user_id=1010619474532331520&count=20', function(err, tweets, response) {
         if(!err && response.statusCode === 200) {
             tweets.forEach(function(tweet) {
                 console.log(`\n* ${chalk.magenta(tweet.created_at)}:`);
