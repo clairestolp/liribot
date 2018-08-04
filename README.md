@@ -17,13 +17,6 @@ Liri is a CLI program that fetches information for you. Liri has four different 
     * chalk
     * wrap-ansi
 
-### Approach
-Iquirer is used to prompt the user to choose between the four commands the user can execute. The user's selection is passed through the `executeCommand()` function which executes the appropriate for each command. Chalk and wrap-Ansi is used to format each output by the program.
-
-`getTweets()` fetches the twitter data for the user keys stored in the .env files and prints the date and the contents of the tweet to the console
-
-`spotifyThis()` uses inquirer to prompt the user to enter a song and runs `getSpotify()` on success. 
-
 ### Assignment Instructions
 
 1. Navigate to the root of your project and run `npm init -y` &mdash; this will initialize a `package.json` file for your project. The `package.json` file is required for installing third party npm packages and saving their version numbers. If you fail to initialize a `package.json` file, it will be troublesome, and at times almost impossible for anyone else to run your code after cloning your project.
