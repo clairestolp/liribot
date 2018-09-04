@@ -17,12 +17,6 @@ Liri is a CLI program that fetches information for you. Liri has four different 
     * chalk
     * wrap-ansi
 
-### Approach
-Iquirer is used to prompt the user to choose between the four commands the user can execute. The user's selection is passed through the `executeCommand()` function which executes the appropriate for each command. Chalk and wrap-Ansi is used to format each output by the program.
-
-`getTweets()` fetches the twitter data for the user keys stored in the .env files and prints the date and the contents of the tweet to the console
-
-`spotifyThis()` uses inquirer to prompt the user to enter a song and runs `getSpotify()` on success. 
 
 ### Assignment Instructions
 
