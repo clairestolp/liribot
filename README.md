@@ -17,7 +17,10 @@ Liri is a CLI program that fetches information for you. Liri has four different 
     * chalk
     * wrap-ansi
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 59af942326aeef185b8c6db0fa2f01ab3be9f17a
 ### Assignment Instructions
 
 1. Navigate to the root of your project and run `npm init -y` &mdash; this will initialize a `package.json` file for your project. The `package.json` file is required for installing third party npm packages and saving their version numbers. If you fail to initialize a `package.json` file, it will be troublesome, and at times almost impossible for anyone else to run your code after cloning your project.
